@@ -112,31 +112,36 @@ class InventoryItem{
     }
 
 
-    public void reserveItem(int numItems){
-        qtyReserved += numItems;
+    // Adding items to shopping carts
+    public boolean reserveItem(int numItems){
+        if ((qtyTotal - qtyReserved)  >= numItems) {
+            qtyReserved+= numItems;
+            return true;
+        }
+        return false;
     }
 
-    // Not sure what this is supposed to be
-    // Maybe release item from reservation?
+    // Shopper removes item from cart
     public void releaseItem(int numItems) {
         qtyReserved-= numItems;
     }
 
-    public void sellItem(int numItems){
+    public boolean sellItem(int numItems){
 
-        if (qtyTotal <= numItems){
-            System.out.println("Insufficient inventory");
-            return;
+        if (qtyTotal >= numItems){
+            qtyTotal -= numItems;
+            qtyReserved -= numItems;
+            if(qtyTotal <= qtyLow){
+                placeInventoryOrder();
+            }
+            return true;
         }
+        return false;
 
-        qtyTotal -= numItems;
-
-        if(qtyTotal <= qtyLow){
-            placeInventoryOrder();
-        }
     }
 
-    public void placeInventoryOrder(){
+    private void placeInventoryOrder(){
+        System.out.printf("Ordering qty %d : %s%n", qtyReorder, product);
         qtyTotal += qtyReorder;
     }
 
