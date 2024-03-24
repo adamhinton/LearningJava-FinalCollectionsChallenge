@@ -142,7 +142,10 @@ class InventoryItem{
 
     private void placeInventoryOrder(){
         System.out.printf("Ordering qty %d : %s%n", qtyReorder, product);
-        qtyTotal += qtyReorder;
     }
 
+    @Override
+    public String toString() {
+        return "%s, $%.2f : [%04d,% 2d]".formatted(product, price, qtyTotal, qtyReserved);
+    }
 }
