@@ -93,30 +93,22 @@ class InventoryItem{
     private int qtyReserved;
     private int qtyReorder;
     private int qtyLow;
-    private double salesPrice;
+    private double price;
 
-    public InventoryItem(Product product, int qtyTotal, int qtyReorder, int qtyLow, double salesPrice) {
+    public InventoryItem(Product product, int qtyTotal, int qtyLow, double price) {
         this.product = product;
         this.qtyTotal = qtyTotal;
-        this.qtyReorder = qtyReorder;
         this.qtyLow = qtyLow;
-        this.salesPrice = salesPrice;
+        this.price = price;
+        this.qtyReorder = qtyTotal;
     }
 
     public Product getProduct() {
         return product;
     }
 
-    public int getQtyTotal() {
-        return qtyTotal;
-    }
-
-    public int getQtyReserved() {
-        return qtyReserved;
-    }
-
-    public double getSalesPrice() {
-        return salesPrice;
+    public double getPrice() {
+        return price;
     }
 
 
