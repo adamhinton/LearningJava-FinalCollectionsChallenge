@@ -2,6 +2,7 @@ package dev.lpa;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class Main {
@@ -40,30 +41,27 @@ enum ProductCategory{
 
 record Product (String sku, String name, String mfgr, ProductCategory category){ }
 
-enum CartType{
-    PHYSICAL, VIRTUAL
-}
 
 class Cart {
-    public static int ID = 1;
+    enum CartType{
+        PHYSICAL, VIRTUAL
+    }
+
+
+    private static int lastId = 1;
 
     private int id;
 
-    private Set<Product> products;
-
-    private LocalDate date;
+    private LocalDate cartDate;
 
     private CartType type;
 
-    // Add item to cart
-    public void addItem (Product product){
-        if (products.contains(product)){
-            System.out.println("Product already in cart");
-            return;
-        }
-        else{
-            products.add(product);
-        }
+    // keyed by sku
+    private Map<String, Integer> products;
+
+//     Add item to cart
+    public void addItem (InventoryItem item, int qty){
+        products.merge(item.getProduct().sku(), qty, Integer::sum);
     }
 
     public void removeItem(Product product){
@@ -75,13 +73,28 @@ class Cart {
 
     }
 
-    public Cart(Set<Product> products, LocalDate date) {
-        this.products = products;
-        this.date = LocalDate.now();
-        // Not sure I did this right
-        this.id = ID;
-        ID++;
+    public Cart(CartType cartType, int days) {
+        this.type = type;
+        this.cartDate = LocalDate.now().minusDays(days);
+        id = lastId++;
+
+        products = new HashMap<>();
     }
+
+    public Cart(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public LocalDate getCartDate() {
+        return cartDate;
+    }
+
+
+
 }
 
 
@@ -148,4 +161,6 @@ class InventoryItem{
     public String toString() {
         return "%s, $%.2f : [%04d,% 2d]".formatted(product, price, qtyTotal, qtyReserved);
     }
+
+
 }
